@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Scripts Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --secondary: #ff0066;
+            --dark: #0a0e1a;
+            --darker: #050810;
+            --card-bg: #111827;
+            --border: #1f2937;
+            --text: #e5e7eb;
+            --text-dim: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--darker);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 102, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 30px 0;
+            border-bottom: 2px solid var(--border);
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--primary)); }
+            50% { filter: drop-shadow(0 0 20px var(--primary)); }
+        }
+
+        .upload-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary), #00cc6f);
+            color: var(--darker);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Main Content */
+        main {
+            padding: 60px 0;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Scripts Grid */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .script-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        .script-card:nth-child(1) { animation-delay: 0.1s; }
+        .script-card:nth-child(2) { animation-delay: 0.2s; }
+        .script-card:nth-child(3) { animation-delay: 0.3s; }
+        .script-card:nth-child(4) { animation-delay: 0.4s; }
+        .script-card:nth-child(5) { animation-delay: 0.5s; }
+        .script-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .script-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .script-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .script-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .script-tag {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .script-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .script-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .script-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .download-btn:hover {
+            background: var(--primary);
+            color: var(--darker);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Upload Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--darker);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: var(--darker);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-dim);
+        }
+
+        .file-input-label:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), #00cc6f);
+            color: var(--darker);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 2px solid var(--border);
+            margin-top: 80px;
+            color: var(--text-dim);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>⚡ Roblox Scripts Hub</h1>
+                <button class="upload-btn" onclick="openModal()">+ Upload Script</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="intro">
+                <h2>Scripts Prontos para Download</h2>
+                <p>Explore e baixe scripts de qualidade para seus jogos favoritos do Roblox</p>
+            </div>
+
+            <div class="scripts-grid" id="scriptsGrid">
+                <!-- Scripts serão adicionados aqui -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>ESP Universal</h3>
+                        <span class="script-tag">Popular</span>
+                    </div>
+                    <p>Script de ESP que funciona em qualquer jogo. Mostra players, itens e entidades através das paredes.</p>
+                    <div class="script-meta">
+                        <span>📅 21/12/2025</span>
+                        <span>⬇️ 1.2k downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="downloadScript('esp-universal')">Download</button>
+                </div>
+
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Auto Farm</h3>
+                        <span class="script-tag">Novo</span>
+                    </div>
+                    <p>Sistema automático de farm com GUI customizável. Suporta múltiplos jogos e configurações personalizadas.</p>
+                    <div class="script-meta">
+                        <span>📅 20/12/2025</span>
+                        <span>⬇️ 850 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="downloadScript('auto-farm')">Download</button>
+                </div>
+
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Fly Script</h3>
+                        <span class="script-tag">Clássico</span>
+                    </div>
+                    <p>Script de voo simples e eficiente. Funciona na maioria dos jogos com controles intuitivos.</p>
+                    <div class="script-meta">
+                        <span>📅 19/12/2025</span>
+                        <span>⬇️ 2.3k downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="downloadScript('fly-script')">Download</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2>Upload Novo Script</h2>
+            <form id="uploadForm" onsubmit="handleUpload(event)">
+                <div class="form-group">
+                    <label for="scriptName">Nome do Script</label>
+                    <input type="text" id="scriptName" required placeholder="Ex: ESP Universal">
+                </div>
+                
+                <div class="form-group">
+                    <label for="scriptDescription">Descrição</label>
+                    <textarea id="scriptDescription" required placeholder="Descreva o que seu script faz..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="scriptTag">Categoria</label>
+                    <select id="scriptTag" required>
+                        <option value="">Selecione...</option>
+                        <option value="Popular">Popular</option>
+                        <option value="Novo">Novo</option>
+                        <option value="Clássico">Clássico</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Arquivo do Script</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="scriptFile" accept=".lua,.txt" required onchange="updateFileName()">
+                        <label for="scriptFile" class="file-input-label" id="fileLabel">
+                            📁 Escolher arquivo (.lua, .txt)
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Publicar Script</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Roblox Scripts Hub - Compartilhe seus scripts com a comunidade</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scripts storage
+        let scripts = JSON.parse(localStorage.getItem('robloxScripts')) || [];
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileLabel').textContent = '📁 Escolher arquivo (.lua, .txt)';
+        }
+
+        function updateFileName() {
+            const fileInput = document.getElementById('scriptFile');
+            const fileLabel = document.getElementById('fileLabel');
+            if (fileInput.files.length > 0) {
+                fileLabel.textContent = '✅ ' + fileInput.files[0].name;
+            }
+        }
+
+        // Handle upload
+        function handleUpload(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('scriptName').value;
+            const description = document.getElementById('scriptDescription').value;
+            const tag = document.getElementById('scriptTag').value;
+            const fileInput = document.getElementById('scriptFile');
+            
+            if (fileInput.files.length === 0) {
+                alert('Por favor, selecione um arquivo!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const script = {
+                    id: Date.now(),
+                    name: name,
+                    description: description,
+                    tag: tag,
+                    content: e.target.result,
+                    fileName: file.name,
+                    date: new Date().toLocaleDateString('pt-BR'),
+                    downloads: 0
+                };
+                
+                scripts.push(script);
+                localStorage.setItem('robloxScripts', JSON.stringify(scripts));
+                
+                displayScripts();
+                closeModal();
+                alert('Script publicado com sucesso!');
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Display scripts
+        function displayScripts() {
+            const grid = document.getElementById('scriptsGrid');
+            
+            if (scripts.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <h3>Nenhum script ainda</h3>
+                        <p>Seja o primeiro a fazer upload de um script!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = scripts.map(script => `
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>${script.name}</h3>
+                        <span class="script-tag">${script.tag}</span>
+                    </div>
+                    <p>${script.description}</p>
+                    <div class="script-meta">
+                        <span>📅 ${script.date}</span>
+                        <span>⬇️ ${script.downloads} downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="downloadScript(${script.id})">Download</button>
+                </div>
+            `).join('');
+        }
+
+        // Download script
+        function downloadScript(scriptId) {
+            const script = scripts.find(s => s.id === scriptId);
+            
+            if (!script) {
+                alert('Script de exemplo! Faça upload dos seus próprios scripts para download real.');
+                return;
+            }
+            
+            // Increment download count
+            script.downloads++;
+            localStorage.setItem('robloxScripts', JSON.stringify(scripts));
+            displayScripts();
+            
+            // Create download
+            const blob = new Blob([script.content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = script.fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        displayScripts();
+
+        // Close modal on outside click
+        document.getElementById('uploadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
